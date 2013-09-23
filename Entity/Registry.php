@@ -31,6 +31,16 @@ class Registry extends AbstractRegistry
     /** @var integer $cachedKarmaNegativeCount */
     protected $cachedKarmaNegativeCount = 0;
 
+	/**
+	 *
+	 * @access public
+	 */
+    public function __construct()
+    {
+        parent::__construct();
+        // your own logic
+    }
+	
     /**
      * Get id
      *
@@ -39,16 +49,6 @@ class Registry extends AbstractRegistry
     public function getId()
     {
         return $this->id;
-    }
-
-    /**
-     * Set cachedPostCount
-     *
-     * @param integer $cachedPostCount
-     */
-    public function setCachedPostCount($cachedPostCount)
-    {
-        $this->cachedPostCount = $cachedPostCount;
     }
 
     /**
@@ -62,13 +62,16 @@ class Registry extends AbstractRegistry
     }
 
     /**
-     * Set cachedKarmaPositiveCount
+     * Set cachedPostCount
      *
-     * @param integer $cachedKarmaPositiveCount
+     * @param integer $cachedPostCount
+	 * @return Registry
      */
-    public function setCachedKarmaPositiveCount($cachedKarmaPositiveCount)
+    public function setCachedPostCount($cachedPostCount)
     {
-        $this->cachedKarmaPositiveCount = $cachedKarmaPositiveCount;
+        $this->cachedPostCount = $cachedPostCount;
+		
+		return $this;
     }
 
     /**
@@ -82,13 +85,16 @@ class Registry extends AbstractRegistry
     }
 
     /**
-     * Set cachedKarmaNegativeCount
+     * Set cachedKarmaPositiveCount
      *
-     * @param integer $cachedKarmaNegativeCount
+     * @param integer $cachedKarmaPositiveCount
+	 * @return Registry
      */
-    public function setCachedKarmaNegativeCount($cachedKarmaNegativeCount)
+    public function setCachedKarmaPositiveCount($cachedKarmaPositiveCount)
     {
-        $this->cachedKarmaNegativeCount = $cachedKarmaNegativeCount;
+        $this->cachedKarmaPositiveCount = $cachedKarmaPositiveCount;
+		
+		return $this;
     }
 
     /**
@@ -99,5 +105,18 @@ class Registry extends AbstractRegistry
     public function getCachedKarmaNegativeCount()
     {
         return $this->cachedKarmaNegativeCount;
+    }
+	
+    /**
+     * Set cachedKarmaNegativeCount
+     *
+     * @param integer $cachedKarmaNegativeCount
+	 * @return Registry
+     */
+    public function setCachedKarmaNegativeCount($cachedKarmaNegativeCount)
+    {
+        $this->cachedKarmaNegativeCount = $cachedKarmaNegativeCount;
+		
+		return $this;
     }
 }

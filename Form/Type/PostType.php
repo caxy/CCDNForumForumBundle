@@ -76,8 +76,10 @@ class PostType extends AbstractType
      */
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
-        $builder->add('body', 'textarea', array(
+        $builder->add('body', 'bb_editor', array(
         //    'data' => $this->getQuote(),
+			'label' => 'ccdn_forum_forum.form.label.post.body',
+			'translation_domain' => 'CCDNForumForumBundle'
         ));
     }
 
@@ -119,7 +121,8 @@ class PostType extends AbstractType
             'csrf_field_name' => '_token',
             // a unique key to help generate the secret token
             'intention'       => 'post_item',
-            'validation_groups' => 'post',
+            'validation_groups' => array('post'),
+            'cascade_validation' => true,
         );
     }
 

@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @author Reece Fowell <reece@codeconsortium.com>
  * @version 1.0
  */
-class CategoryController extends ContainerAware
+class CategoryController extends BaseController
 {
 
     /**
@@ -31,7 +31,7 @@ class CategoryController extends ContainerAware
      */
     public function indexAction()
     {
-        $categories = $this->container->get('ccdn_forum_forum.repository.category')->findAllJoinedToBoard();
+        $categories = $this->filterViewableCategories($this->container->get('ccdn_forum_forum.repository.category')->findAllJoinedToBoard());
 
         $topicsPerPage = $this->container->getParameter('ccdn_forum_forum.board.show.topics_per_page');
 
@@ -39,7 +39,6 @@ class CategoryController extends ContainerAware
             ->add($this->container->get('translator')->trans('ccdn_forum_forum.crumbs.forum_index', array(), 'CCDNForumForumBundle'), $this->container->get('router')->generate('ccdn_forum_forum_category_index'), "home");
 
         return $this->container->get('templating')->renderResponse('CCDNForumForumBundle:Category:index.html.' . $this->getEngine(), array(
-            'user_profile_route' => $this->container->getParameter('ccdn_forum_forum.user.profile_route'),
             'crumbs' => $crumbs,
             'categories' => $categories,
             'topics_per_page' => $topicsPerPage,
@@ -54,10 +53,9 @@ class CategoryController extends ContainerAware
      */
     public function showAction($categoryId)
     {
-
-        $category = $this->container->get('ccdn_forum_forum.repository.category')->findOneByIdJoinedToBoard($categoryId);
-
-        if (! $category) {
+        $categories = $this->filterViewableCategories(array($this->container->get('ccdn_forum_forum.repository.category')->findOneByIdJoinedToBoard($categoryId)));
+		
+        if (! $categories[0]) {
             throw NotFoundhttpException('No such category exists!');
         }
 
@@ -65,24 +63,12 @@ class CategoryController extends ContainerAware
 
         $crumbs = $this->container->get('ccdn_component_crumb.trail')
             ->add($this->container->get('translator')->trans('ccdn_forum_forum.crumbs.forum_index', array(), 'CCDNForumForumBundle'), $this->container->get('router')->generate('ccdn_forum_forum_category_index'), "home")
-            ->add($category->getName(), $this->container->get('router')->generate('ccdn_forum_forum_category_show', array('categoryId' => $categoryId)), "category");
+            ->add($categories[0]->getName(), $this->container->get('router')->generate('ccdn_forum_forum_category_show', array('categoryId' => $categoryId)), "category");
 
         return $this->container->get('templating')->renderResponse('CCDNForumForumBundle:Category:show.html.' . $this->getEngine(), array(
-            'user_profile_route' => $this->container->getParameter('ccdn_forum_forum.user.profile_route'),
             'crumbs' => $crumbs,
-            'category' => $category,
+            'categories' => $categories,
             'topics_per_page' => $topicsPerPage,
         ));
     }
-
-    /**
-     *
-     * @access protected
-     * @return string
-     */
-    protected function getEngine()
-    {
-        return $this->container->getParameter('ccdn_forum_forum.template.engine');
-    }
-
 }

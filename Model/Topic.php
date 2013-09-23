@@ -46,9 +46,14 @@ abstract class Topic
 
     /** @var ArrayCollection $subscriptions */
     protected $subscriptions;
-
+	
+	/**
+	 *
+	 * @access public
+	 */
     public function __construct()
     {
+        // your own logic
         $this->posts = new ArrayCollection();
         $this->subscriptions = new ArrayCollection();
     }
@@ -262,19 +267,6 @@ abstract class Topic
 
         return $this;
     }
-
-//    /**
-//     * @param ArrayCollection $subscriptions
-//     * @return Topic
-//     */
-//    public function addSubscriptions(array $subscriptions)
-//    {
-//        foreach($subscriptions as $subscription) {
-//            $this->subscriptions->add($subscription);
-//        }
-//
-//        return $this;
-//    }
 
     /**
      * Add subscription

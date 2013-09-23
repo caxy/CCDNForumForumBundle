@@ -26,7 +26,7 @@ use CCDNForum\ForumBundle\Entity\Draft;
  * @author Reece Fowell <reece@codeconsortium.com>
  * @version 1.0
  */
-class DraftController extends ContainerAware
+class DraftController extends BaseController
 {
 
     /**
@@ -57,7 +57,6 @@ class DraftController extends ContainerAware
             ->add($this->container->get('translator')->trans('ccdn_forum_forum.crumbs.drafts_index', array(), 'CCDNForumForumBundle'), $this->container->get('router')->generate('ccdn_forum_forum_draft_list'), "home");
 
         return $this->container->get('templating')->renderResponse('CCDNForumForumBundle:Draft:list.html.' . $this->getEngine(), array(
-            'user_profile_route' => $this->container->getParameter('ccdn_forum_forum.user.profile_route'),
             'crumbs' => $crumbs,
             'pager' => $draftsPaginated,
         ));

@@ -21,7 +21,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  * @author Reece Fowell <reece@codeconsortium.com>
  * @version 1.0
  */
-class BoardController extends ContainerAware
+class BoardController extends BaseController
 {
 
     /**
@@ -65,7 +65,6 @@ class BoardController extends ContainerAware
             ->add($board->getName(), $this->container->get('router')->generate('ccdn_forum_forum_board_show', array('boardId' => $boardId)), "board");
 
         return $this->container->get('templating')->renderResponse('CCDNForumForumBundle:Board:show.html.' . $this->getEngine(), array(
-            'user_profile_route' => $this->container->getParameter('ccdn_forum_forum.user.profile_route'),
             'crumbs' => $crumbs,
             'board' => $board,
             'pager' => $topicsPager,

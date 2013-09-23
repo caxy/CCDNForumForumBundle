@@ -41,12 +41,6 @@ class Configuration implements ConfigurationInterface
         // more information on that topic.
         $rootNode
             ->children()
-                ->arrayNode('user')
-			        ->addDefaultsIfNotSet()
-                    ->children()
-                        ->scalarNode('profile_route')->defaultValue('ccdn_user_profile_show_by_id')->end()
-                    ->end()
-                ->end()
                 ->arrayNode('template')
 			        ->addDefaultsIfNotSet()
                     ->children()
@@ -55,7 +49,6 @@ class Configuration implements ConfigurationInterface
                 ->end()
             ->end();
 
-        $this->addServices($rootNode);
         $this->addFixtureReferenceSection($rootNode);
         $this->addSEOSection($rootNode);
         $this->addCategorySection($rootNode);
@@ -70,31 +63,6 @@ class Configuration implements ConfigurationInterface
         $this->addTranscriptSection($rootNode);
 
         return $treeBuilder;
-    }
-
-    /**
-     *
-     * @access protected
-     * @param ArrayNodeDefinition $node
-     */
-    protected function addServices(ArrayNodeDefinition $node)
-    {
-        $node
-            ->addDefaultsIfNotSet()
-            ->children()
-                ->arrayNode('service')
-                    ->addDefaultsIfNotSet()
-                    ->children()
-                        ->arrayNode('provider')
-                            ->addDefaultsIfNotSet()
-                            ->children()
-                                ->scalarNode('profile_provider')->defaultValue('CCDNForum\ForumBundle\Component\Provider\SimpleProfileProvider')->end()
-                            ->end()
-                        ->end()
-                    ->end()
-                ->end()
-            ->end()
-        ;
     }
 
     /**
@@ -185,7 +153,7 @@ class Configuration implements ConfigurationInterface
                             ->addDefaultsIfNotSet()
                             ->children()
                                 ->scalarNode('layout_template')->defaultValue('CCDNComponentCommonBundle:Layout:layout_body_right.html.twig')->end()
-                                ->scalarNode('topics_per_page')->defaultValue('5')->end()
+                                ->scalarNode('topics_per_page')->defaultValue('50')->end()
                                 ->scalarNode('topic_title_truncate')->defaultValue('50')->end()
                                 ->scalarNode('first_post_datetime_format')->defaultValue('d-m-Y - H:i')->end()
                                 ->scalarNode('last_post_datetime_format')->defaultValue('d-m-Y - H:i')->end()
@@ -406,7 +374,7 @@ class Configuration implements ConfigurationInterface
                             ->addDefaultsIfNotSet()
                             ->children()
                                 ->scalarNode('layout_template')->defaultValue('CCDNComponentCommonBundle:Layout:layout_body_right.html.twig')->end()
-                                ->scalarNode('topics_per_page')->defaultValue('40')->end()
+                                ->scalarNode('topics_per_page')->defaultValue('50')->end()
                                 ->scalarNode('topic_title_truncate')->defaultValue('50')->end()
                                 ->scalarNode('first_post_datetime_format')->defaultValue('d-m-Y - H:i')->end()
                                 ->scalarNode('last_post_datetime_format')->defaultValue('d-m-Y - H:i')->end()

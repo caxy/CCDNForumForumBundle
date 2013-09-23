@@ -22,8 +22,13 @@ abstract class Category
     /** @var ArrayCollection $boards */
     protected $boards;
 
+	/**
+	 *
+	 * @access public
+	 */
     public function __construct()
     {
+        // your own logic
         $this->boards = new ArrayCollection();
     }
 
@@ -74,6 +79,18 @@ abstract class Category
     public function addBoard(ConcreteBoard $board)
     {
         $this->boards[] = $board;
+
+        return $this;
+    }
+
+    /**
+     * @param Board $board
+     *
+     * @return $this
+     */
+    public function removeBoard(ConcreteBoard $board)
+    {
+        $this->boards->removeElement($board);
 
         return $this;
     }

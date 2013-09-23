@@ -27,7 +27,17 @@ class Subscription extends AbstractSubscription
 
     /** @var Boolean $isSubscribed */
     protected $isSubscribed = false;
-
+	
+	/**
+	 *
+	 * @access public
+	 */
+    public function __construct()
+    {
+        parent::__construct();
+        // your own logic
+    }
+	
     /**
      * Get id
      *
@@ -39,16 +49,6 @@ class Subscription extends AbstractSubscription
     }
 
     /**
-     * Set isRead
-     *
-     * @param boolean $isRead
-     */
-    public function setIsRead($isRead)
-    {
-        $this->isRead = $isRead;
-    }
-
-    /**
      * Get isRead
      *
      * @return boolean
@@ -57,15 +57,18 @@ class Subscription extends AbstractSubscription
     {
         return $this->isRead;
     }
-
+	
     /**
-     * Set isSubscribed
+     * Set isRead
      *
-     * @param boolean $isSubscribed
+     * @param boolean $isRead
+	 * @return Subscription
      */
-    public function setIsSubscribed($isSubscribed)
+    public function setIsRead($isRead)
     {
-        $this->isSubscribed = $isSubscribed;
+        $this->isRead = $isRead;
+		
+		return $this;
     }
 
     /**
@@ -76,5 +79,18 @@ class Subscription extends AbstractSubscription
     public function getIsSubscribed()
     {
         return $this->isSubscribed;
+    }
+	
+    /**
+     * Set isSubscribed
+     *
+     * @param boolean $isSubscribed
+	 * @return Subscription
+     */
+    public function setIsSubscribed($isSubscribed)
+    {
+        $this->isSubscribed = $isSubscribed;
+		
+		return $this;
     }
 }

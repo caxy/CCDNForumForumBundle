@@ -15,6 +15,7 @@ namespace CCDNForum\ForumBundle\Controller;
 
 use Symfony\Component\DependencyInjection\ContainerAware;
 use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
@@ -27,7 +28,7 @@ use CCDNForum\ForumBundle\Entity\Draft;
  * @author Reece Fowell <reece@codeconsortium.com>
  * @version 1.0
  */
-class TopicController extends ContainerAware
+class TopicController extends BaseController
 {
 
     /**
@@ -102,7 +103,6 @@ class TopicController extends ContainerAware
             ->add($topic->getTitle(), $this->container->get('router')->generate('ccdn_forum_forum_topic_show', array('topicId' => $topic->getId())), "communication");
 
         return $this->container->get('templating')->renderResponse('CCDNForumForumBundle:Topic:show.html.' . $this->getEngine(), array(
-            'user_profile_route' => $this->container->getParameter('ccdn_forum_forum.user.profile_route'),
             'user'	=> $user,
             'crumbs' => $crumbs,
             'pager' => $postsPager,
@@ -137,6 +137,10 @@ class TopicController extends ContainerAware
             throw new NotFoundHttpException('No such board exists!');
         }
 
+        if (! $board->isAuthorisedToCreateTopic($this->container->get('security.context'))) {
+            throw new AccessDeniedException('You do not have permission to use this resource.');
+        }
+
         //
         // Set the form handler options
         //
@@ -169,7 +173,6 @@ class TopicController extends ContainerAware
             ->add($this->container->get('translator')->trans('ccdn_forum_forum.crumbs.topic.create', array(), 'CCDNForumForumBundle'), $this->container->get('router')->generate('ccdn_forum_forum_topic_create', array('boardId' => $board->getId())), "edit");
 
         return $this->container->get('templating')->renderResponse('CCDNForumForumBundle:Topic:create.html.' . $this->getEngine(), array(
-            'user_profile_route' => $this->container->getParameter('ccdn_forum_forum.user.profile_route'),
             'user' => $user,
             'crumbs' => $crumbs,
             'board' => $board,
@@ -199,6 +202,10 @@ class TopicController extends ContainerAware
 
         if (! $topic) {
             throw new NotFoundHttpException('No such topic exists!');
+        }
+
+        if (! $topic->getBoard()->isAuthorisedToTopicReply($this->container->get('security.context'))) {
+            throw new AccessDeniedException('You do not have permission to use this resource.');
         }
 
         if ($topic->getIsClosed() && ! $this->container->get('security.context')->isGranted('ROLE_MODERATOR')) {
@@ -251,11 +258,10 @@ class TopicController extends ContainerAware
             ->add($this->container->get('translator')->trans('ccdn_forum_forum.crumbs.topic.reply', array(), 'CCDNForumForumBundle'), $this->container->get('router')->generate('ccdn_forum_forum_topic_reply', array('topicId' => $topic->getId())), "edit");
 
         return $this->container->get('templating')->renderResponse('CCDNForumForumBundle:Topic:reply.html.' . $this->getEngine(), array(
-            'user_profile_route' => $this->container->getParameter('ccdn_forum_forum.user.profile_route'),
             'user' => $user,
             'crumbs' => $crumbs,
             'topic' => $topic,
-            'preview' => $formHandler->getForm()->getData(),
+            //'preview' => $formHandler->getForm()->getData(),
             'form' => $formHandler->getForm()->createView(),
         ));
     }

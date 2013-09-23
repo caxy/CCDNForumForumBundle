@@ -1,15 +1,18 @@
 {%- spaceless -%}
-	<tr class="{{- cycle(['row_odd', 'row_even'], row) }} marked_read">
+	<tr>
 		<td class="center">
-		{%- if topic.getDeletedDate -%}
-			<i class="icon-trash"></i>
-		{%- else -%}
-			{%- if topic.getClosedDate -%}
-				<i class="icon-lock"></i>
+			{%- if topic.isDeleted -%}
+				<i class="icon-trash"></i>
 			{%- else -%}
-				{# else if not closed, then if new posts add special icon here #}
+				{%- if topic.isClosed -%}
+					<i class="icon-lock"></i>
+				{%- else -%}
+					{# else if not closed, then if new posts add special icon here #}
+					{%- if topic.cachedReplyCount > 100 -%}
+						<i class="icon-fire"></i>
+					{%- endif -%}
+				{%- endif -%}
 			{%- endif -%}
-		{%- endif -%}
 		</td>
 		<td class="center">
 			{# use custom icons below, will be later specified in the create topic form #}
@@ -35,9 +38,10 @@
                 {% set topic_author = create_profile(topic.getFirstPost.getCreatedBy) %}
 
 				{{- 'ccdn_forum_forum.post.posted_by' | trans({}, 'CCDNForumForumBundle') -}}
-                {{ topic_author.getProfilePath|raw }}
+                
+				{{ topic_author.getProfilePath|raw }}
 
-				&nbsp;
+				&nbsp;&#183;
                 <a href="{{- path('ccdn_forum_forum_topic_show', {'topicId': topic.getId }) -}}">
                     <abbr class="timestamper" title="{{- topic.getFirstPost.getCreatedDate |date('Y-m-d H:i:s T Z', 'Europe/London') -}}">
                         {{- topic.getFirstPost.getCreatedDate |date(ccdn_forum_forum.board.show.first_post_datetime_format) -}}
@@ -45,11 +49,15 @@
                 </a>
 			{%- endif -%}
 		</td>
-		<td class="center">
-			{{- topic.getCachedReplyCount -}}
+		<td class="center prominent-figure">
+			<span class="label label-info lead" title="{{- topic.getCachedReplyCount -}}">
+				{{- abbr_number(topic.getCachedReplyCount) -}}
+			</span>
 		</td>
-		<td class="center">
-			{{- topic.getCachedViewCount -}}
+		<td class="center prominent-figure">
+			<span class="label label-info lead" title="{{- topic.getCachedViewCount -}}">
+				{{- abbr_number(topic.getCachedViewCount) -}}
+			</span>
 		</td>
 		<td class="center">
 			{%- if topic.getLastPost -%}
