@@ -117,6 +117,8 @@ class LoadForumData extends AbstractFixture implements OrderedFixtureInterface, 
      */
     public function load(ObjectManager $manager)
     {
+	// Don't load fixtures for now
+	return 0;
         $referencedUserAdmin = $this->getReference($this->container->getParameter('ccdn_forum_forum.fixtures.user_admin'));
 
         if (null == $this->checkCategory('General')) {
